@@ -3,7 +3,9 @@ module.exports = robot => {
     const repoOwner = context.payload.pull_request.user.login;
     const reviwer = context.payload.review.user.login;
     const commentMsg = `unassign @${reviwer}, assign @${repoOwner}`;
-
+    if (repoOwner === reviwer) {
+      return;
+    }
     const commentParams = context.issue({ body: commentMsg })
     const addAssigneesParams = context.issue({ assignees: [repoOwner] })
     const removeAssigneesParams = context.issue({ body: {
