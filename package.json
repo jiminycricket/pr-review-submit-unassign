@@ -13,6 +13,12 @@
     "probot": "^3.0.0"
   },
   "devDependencies": {
+    "eslint": "^4.11.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "jest": "^21.2.1",
     "localtunnel": "^1.8.2",
     "standard": "^10.0.3"
