@@ -21,6 +21,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "jest": "^21.2.1",
     "localtunnel": "^1.8.2",
+    "lodash": "^4.17.4",
     "standard": "^10.0.3"
   },
   "engines": {
