@@ -27,7 +27,7 @@ async function assignAfterReviewSubmitted (context) {
   }
 
   if (config.assignPullRequestOwner) {
-    const params = context.issue({ assignees: [pullRequestOwner] })
+    const params = context.issue({ body: { assignees: [pullRequestOwner] } })
     await github.issues.addAssigneesToIssue(params)
 
     if (config.unassignReviewer) {
@@ -42,7 +42,7 @@ async function assignAfterReviewSubmitted (context) {
 
   if (config.leaveComment) {
     const commentParams = context.issue({ body: comment })
-    return github.issues.createComment(commentParams)
+    await github.issues.createComment(commentParams)
   }
 }
 

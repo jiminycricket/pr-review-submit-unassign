@@ -40,7 +40,9 @@ describe('assignAfterReviewSubmitted', () => {
     })
 
     expect(addAssigneesToIssue).toHaveBeenCalled()
-    expect(addAssigneesToIssue).toHaveBeenCalledWith({ assignees: ['foo'] })
+    expect(addAssigneesToIssue).toHaveBeenCalledWith({
+      body: { assignees: ['foo'] }
+    })
 
     expect(createComment).not.toHaveBeenCalled()
   })
