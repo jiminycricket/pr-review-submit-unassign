@@ -42,7 +42,7 @@ async function assignAfterReviewSubmitted (context) {
 
   if (config.leaveComment) {
     const commentParams = context.issue({ body: comment })
-    return github.issues.createComment(commentParams)
+    await github.issues.createComment(commentParams)
   }
 }
 
