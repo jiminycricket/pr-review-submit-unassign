@@ -1,49 +1,37 @@
+const lodash = require('lodash')
 const defaultConfig = require('./lib/defaultConfig')
 
 module.exports = robot => {
-  robot.on('pull_request_review.submitted', assignAfterReviewSubmitted)
-}
+  robot.log('pr-review-submit-unassign is on!')
 
-async function assignAfterReviewSubmitted (context) {
-  const { github } = context
-  const userConfig = await context.config('pr_review_submit_unassign.yml')
-  const config = Object.assign({}, defaultConfig, userConfig)
-
-  const { pull_request, review } = context.payload
-  const pullRequestOwner = pull_request.user.login
-  const reviwer = review.user.login
-
-  // NOTE not assign pull request owner if review is submitted by owner
-  if (pullRequestOwner === reviwer) {
-    return
-  }
-
-  let comment = ''
-
-  if (config.unassignReviewer) {
-    const params = context.issue({ body: { assignees: [reviwer] } })
-    await github.issues.removeAssigneesFromIssue(params)
-    comment += config.unassignTemplate.replace('{reviwer}', reviwer)
-  }
-
-  if (config.assignPullRequestOwner) {
-    const params = context.issue({ assignees: [pullRequestOwner] })
-    await github.issues.addAssigneesToIssue(params)
-
-    if (config.unassignReviewer) {
-      comment += ', '
+  robot.on('pull_request_review.submitted', async context => {
+    const repoOwner = lodash.get(context.payload, 'pull_request.user.login')
+    const reviewer = lodash.get(context.payload, 'review.user.login')
+    if (repoOwner === reviewer) {
+      return
     }
 
-    comment += config.assignTemplate.replace(
-      '{pullRequestOwner}',
-      pullRequestOwner
-    )
-  }
+    let commentMessage = ''
 
-  if (config.leaveComment) {
-    const commentParams = context.issue({ body: comment })
-    await github.issues.createComment(commentParams)
-  }
+    const userConfig = await context.config('pr_review_submit_unassign.yml')
+    const config = { ...defaultConfig, ...userConfig }
+
+    if (config.unAssignReviewer) {
+      const params = context.issue({ assignees: [reviewer] })
+      await context.github.issues.removeAssigneesFromIssue(params)
+      commentMessage += config.commentUnassign.replace('{reviwer}', reviewer)
+    }
+
+    if (config.assignPrOwner) {
+      const params = context.issue({ assignees: [repoOwner] })
+      await context.github.issues.addAssigneesToIssue(params)
+      commentMessage += config.unAssignReviewer ? ', \n' : ''
+      commentMessage += config.commentAssign.replace('{repoOwner}', repoOwner)
+    }
+
+    if (commentMessage) {
+      const commentParams = context.issue({ body: commentMessage })
+      context.github.issues.createComment(commentParams)
+    }
+  })
 }
-
-module.exports.assignAfterReviewSubmitted = assignAfterReviewSubmitted

@@ -10,6 +10,7 @@
     "test": "standard && jest"
   },
   "dependencies": {
+    "lodash": "^4.17.10",
     "probot": "^6.0.0"
   },
   "devDependencies": {
