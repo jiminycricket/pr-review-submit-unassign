@@ -36,7 +36,7 @@ describe('assignAfterReviewSubmitted', () => {
 
     expect(removeAssigneesFromIssue).toHaveBeenCalled()
     expect(removeAssigneesFromIssue).toHaveBeenCalledWith({
-      body: { assignees: ['bar'] }
+      assignees: ['bar']
     })
 
     expect(addAssigneesToIssue).toHaveBeenCalled()
@@ -99,7 +99,7 @@ describe('assignAfterReviewSubmitted', () => {
 
     expect(createComment).toHaveBeenCalled()
     expect(createComment).toHaveBeenCalledWith({
-      body: '@{reviewer} unassigned, assign @foo'
+      body: '@bar unassigned, assign @foo'
     })
   })
 })

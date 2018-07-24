@@ -7,10 +7,10 @@
   "repository": "https://github.com/0o0o0opz/probot-pr-review-submit-unassign.git",
   "scripts": {
     "start": "probot run ./index.js",
-    "test": "jest && standard"
+    "test": "standard && jest"
   },
   "dependencies": {
-    "probot": "^3.0.0"
+    "probot": "^6.0.0"
   },
   "devDependencies": {
     "eslint": "^4.11.0",
@@ -20,8 +20,8 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "jest": "^21.2.1",
-    "localtunnel": "^1.8.2",
     "lodash": "^4.17.4",
+    "smee-client": "^1.0.2",
     "standard": "^10.0.3"
   },
   "engines": {
