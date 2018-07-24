@@ -1,6 +1,7 @@
 const defaultConfig = require('./lib/defaultConfig')
 
 module.exports = robot => {
+  robot.log('pr-review-submit-unassign is on!')
   robot.on('pull_request_review.submitted', assignAfterReviewSubmitted)
 }
 
@@ -11,19 +12,19 @@ async function assignAfterReviewSubmitted (context) {
 
   const { pull_request, review } = context.payload
   const pullRequestOwner = pull_request.user.login
-  const reviwer = review.user.login
+  const reviewer = review.user.login
 
   // NOTE not assign pull request owner if review is submitted by owner
-  if (pullRequestOwner === reviwer) {
+  if (pullRequestOwner === reviewer) {
     return
   }
 
   let comment = ''
 
   if (config.unassignReviewer) {
-    const params = context.issue({ body: { assignees: [reviwer] } })
+    const params = context.issue({ assignees: [reviewer] })
     await github.issues.removeAssigneesFromIssue(params)
-    comment += config.unassignTemplate.replace('{reviwer}', reviwer)
+    comment += config.unassignTemplate.replace('{reviewer}', reviewer)
   }
 
   if (config.assignPullRequestOwner) {
